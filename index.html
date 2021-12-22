@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
@@ -60,12 +60,25 @@
   <audio data-key="76" src="assets/audio/01 - JavaScript Drum Kit_sounds_tink.wav"></audio>
 
   <script>
-    window.addEventListener('keydown', function (e) {
+    
+    function playSound(e) {
       const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
       if (!audio) return;
       audio.currentTime = 0;
       audio.play();
-    })
+      key.classList.add('playing');
+    };
+    
+    function removeTransition(e) {
+      if (e.propertyName !== 'transform') return; // skip it if it's not a transform
+      this.classList.remove('playing');
+    }
+    
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+    window.addEventListener('keydown', playSound);
   </script>
 
 
